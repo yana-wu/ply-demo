@@ -1,0 +1,29 @@
+# basic github workflow to exercise ply tests
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    env:
+      PLY_VALUES: ${{ secrets.PLY_VALUES }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '14.x'
+    - run: npm install
+    - run: npx ply --version
+    - run: npm test
+    - name: ply
+      uses: ply-ct/ply-action@v1.0.4
+      with:
+        result-file: test/results/actual/ply-results.json
+

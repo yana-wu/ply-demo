@@ -1,0 +1,167 @@
+Start:
+  id: s1
+  status: Completed
+Repository Topics:
+  id: s3
+  request:
+    url: https://api.github.com/graphql
+    method: POST
+    headers:
+      Content-Type: application/json
+      User-Agent: ply-ct
+    body: |-
+      query {
+        repository(owner: "${github.organization}", name: "${github.repository}") {
+          repositoryTopics(first: 10) {
+            edges {
+              node {
+                topic {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+  response:  # 277 ms
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type: application/json; charset=utf-8
+      x-github-media-type: github.v4; format=json
+    body: |-
+      {
+        "data": {
+          "repository": {
+            "repositoryTopics": {
+              "edges": [
+                {
+                  "node": {
+                    "topic": {
+                      "name": "rest-api"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "testing"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "typescript"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "nodejs"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "test-automation"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "continuous-testing"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "graphql"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "workflow"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+  status: Completed
+Find Repository ID:
+  id: s4
+  request:
+    url: https://api.github.com/graphql
+    method: POST
+    headers:
+      Content-Type: application/json
+      User-Agent: ply-ct
+    body: |-
+      query findRepositoryId {
+        repository(owner:"${github.organization}", name:"${github.repository}") {
+          id
+        }
+      }
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type: application/json; charset=utf-8
+      x-github-media-type: github.v4; format=json
+    body: |-
+      {
+        "data": {
+          "repository": {
+            "id": "MDEwOlJlcG9zaXRvcnkxMjk1NDk0ODk="
+          }
+        }
+      }
+  status: Completed
+Star Repository:
+  id: s5
+  request:
+    url: https://api.github.com/graphql
+    method: POST
+    headers:
+      Content-Type: application/json
+      User-Agent: ply-ct
+    body: |-
+      mutation starRepository {
+        addStar(input:{starrableId:"${@s4.response.body.data.repository.id}"}) {
+          starrable {
+            viewerHasStarred
+          }
+        }
+      }
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type: application/json; charset=utf-8
+      x-github-media-type: github.v4; format=json
+    body: |-
+      {
+        "data": {
+          "addStar": {
+            "starrable": {
+              "viewerHasStarred": true
+            }
+          }
+        }
+      }
+  status: Completed
+Stop:
+  id: s2
+  status: Completed
