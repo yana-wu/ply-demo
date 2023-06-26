@@ -1,0 +1,6 @@
+Form Data:
+  url: https://postman-echo.com/post
+  method: POST
+  headers:
+    Content-Type: application/x-www-form-urlencoded
+  body: xxx=yyy&foo%201=bar1&foo%242=bar%202&movieId=${movieId}&org-${github.organization}=repo-${github.repository}
