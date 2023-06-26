@@ -1,0 +1,93 @@
+github-graphql-topics:
+  request:
+    url: https://api.github.com/graphql
+    method: POST
+    headers: {}
+    body: |
+      query {
+        repository(owner: "${github.organization}", name: "${github.repository}") {
+          repositoryTopics(first: 10) {
+            edges {
+              node {
+                topic {
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      content-type: application/json; charset=utf-8
+      x-github-media-type: github.v4; format=json
+    body: |-
+      {
+        "data": {
+          "repository": {
+            "repositoryTopics": {
+              "edges": [
+                {
+                  "node": {
+                    "topic": {
+                      "name": "rest-api"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "testing"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "typescript"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "nodejs"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "test-automation"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "continuous-testing"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "graphql"
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "topic": {
+                      "name": "workflow"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }

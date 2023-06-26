@@ -1,0 +1,39 @@
+# basic github workflow to exercise ply tests
+name: build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      TMDB_KEY: ${{ secrets.TMDB_KEY }}
+      FORCE_COLOR: 'true'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - run: |
+        npm install
+        npm run build
+    - run: npm run start-movies
+    - name: ply
+      uses: ply-ct/ply-action@v3.0
+      with:
+        values-files: |-
+          test/values/global.json
+          test/values/localhost.json
+
+      env:
+        NODE_OPTIONS: '-r ts-node/register'
+
+    - run: npm run stop-movies
+

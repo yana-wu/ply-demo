@@ -1,0 +1,55 @@
+{
+  "name": "@ply-ct/ply-demo",
+  "version": "3.2.5",
+  "description": "Illustrate Ply automated testing",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ply-ct/ply-demo.git"
+  },
+  "main": "dist/src/main.js",
+  "files": [
+    "dist/src"
+  ],
+  "types": "dist/src",
+  "engines": {
+    "node": ">=12"
+  },
+  "config": {
+    "port": 3000
+  },
+  "scripts": {
+    "build": "tsc",
+    "start-movies": "run-script-os",
+    "start-movies:default": "ply-movies start -p $npm_package_config_port -q &",
+    "start-movies:windows": "start /b ply-movies start -p %npm_package_config_port% -q",
+    "start-movies-foreground": "ply-movies start -p $npm_package_config_port",
+    "stop-movies": "run-script-os",
+    "stop-movies:default": "ply-movies stop -p $npm_package_config_port",
+    "stop-movies:windows": "ply-movies stop -p %npm_package_config_port%",
+    "ply": "ply --trusted --reporter=json --outputFile=test/results/actual/ply-results.json",
+    "pretest": "npm run start-movies",
+    "test": "npm-run-all ply stop-movies --continue-on-error",
+    "load-test-sequential": "ply test/flows/rowwise-movies-api.ply.flow --valuesFiles=\"test/values/localhost.json,test/values/forties-movies.xlsx\"",
+    "load-test-parallel": "ply test/flows/rowwise-movies-api.ply.flow --valuesFiles=\"test/values/localhost.json,test/values/forties-movies.csv\" --submit --parallel --quiet --reporter=csv",
+    "html-report": "ply --report=node_modules/@ply-ct/ply-viz#html -o load-test-results.html"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.34.0",
+    "npm-run-all": "^4.1.5",
+    "run-script-os": "^1.1.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "@ply-ct/ply": "^3.2.5",
+    "@ply-ct/ply-movies": "^1.2.4"
+  },
+  "optionalDependencies": {
+    "@ply-ct/ply-viz": "^0.1.0"
+  }
+}
